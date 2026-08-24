@@ -1,0 +1,473 @@
+<!--
+====================================================================
+  LP DE REMARKETING — PACOTE BONITO (MS) · 6 DIAS · 20% OFF
+====================================================================
+  Campos que você ainda troca {{ }}:
+    {{MARCA}}         -> nome da sua empresa
+    {{LINK_CONTATO}}  -> seu link de WhatsApp / formulário
+    {{WHATSAPP}}      -> número exibido
+
+  OPÇÕES DE HEADLINE (troque no <h1> se quiser):
+    A) "As águas de Bonito ainda estão te esperando."
+    B) "Você parou a um passo de Bonito."
+    C) "Guardamos seu lugar em Bonito — agora 20% mais barato."
+  Prazo do contador: ajuste HORAS_DE_OFERTA lá no <script>.
+====================================================================
+-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bonitour · seu Bonito ainda está reservado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:      #14103A;   /* fundo profundo (índigo-noite) */
+    --ink-2:    #211a55;   /* fundo secundário */
+    --paper:    #FFF6EC;   /* creme do cupom */
+    --amber:    #FFC24B;   /* dourado do desconto (mantido) */
+    --purple:   #b07ae6;   /* roxo */
+    --blue:     #576be2;   /* azul */
+    --green:    #22C55E;   /* verde do botão */
+    --green-dk: #16A34A;
+    --mist:     #C3C0E8;   /* texto suave sobre escuro */
+    --line:     rgba(255,255,255,.12);
+    --shadow:   0 30px 70px -25px rgba(0,0,0,.6);
+    --r:        20px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Inter",system-ui,sans-serif;color:var(--paper);
+    background:
+      radial-gradient(120% 80% at 82% -10%, rgba(176,122,230,.45) 0%, transparent 55%),
+      radial-gradient(90% 70% at 0% 108%, rgba(87,107,226,.40) 0%, transparent 60%),
+      var(--ink);
+    line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+
+  .topbar{
+    text-align:center;font-size:13px;font-weight:600;letter-spacing:.04em;
+    padding:12px 24px;color:var(--ink);
+    background:linear-gradient(90deg,var(--amber),#FFD782);
+  }
+
+  /* HERO */
+  .hero{padding:64px 0 40px;text-align:center}
+  .brand-logo{height:48px;width:auto;margin:0 auto 30px;display:block;opacity:.95}
+  .eyebrow{
+    display:inline-block;font-size:13px;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--purple);
+    border:1px solid var(--line);border-radius:100px;padding:7px 16px;margin-bottom:26px;
+  }
+  h1{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+    font-size:clamp(2.5rem,6.6vw,4.8rem);line-height:.99;letter-spacing:-.02em;
+    max-width:15ch;margin:0 auto;
+  }
+  h1 .accent{
+    background:linear-gradient(90deg,var(--purple),var(--blue));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .sub{color:var(--mist);font-size:clamp(1.05rem,2.2vw,1.28rem);max-width:48ch;margin:22px auto 0}
+
+  /* CUPOM / TICKET */
+  .ticket{
+    position:relative;background:var(--paper);color:var(--ink);
+    max-width:560px;margin:46px auto 0;border-radius:var(--r);box-shadow:var(--shadow);
+    display:grid;grid-template-columns:1.15fr 1fr;text-align:left;overflow:hidden;
+  }
+  .ticket::before,.ticket::after{
+    content:"";position:absolute;top:50%;width:34px;height:34px;
+    background:var(--ink);border-radius:50%;transform:translateY(-50%);
+  }
+  .ticket::before{left:-17px}
+  .ticket::after{right:-17px}
+  .ticket-main{padding:30px 30px;position:relative;
+    background:radial-gradient(120% 90% at 50% 0%, rgba(255,194,75,.28) 0%, transparent 62%)}
+  .ticket-kicker{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink);background:var(--amber);border-radius:100px;padding:5px 12px}
+  .discount{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+    font-size:clamp(4rem,12vw,6rem);line-height:.85;margin:10px 0 12px;color:var(--ink);
+    text-shadow:0 4px 0 rgba(255,194,75,.35);
+  }
+  .discount small{font-size:.3em;vertical-align:top;font-weight:800}
+  .price-row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .price-old{color:#b0a394;text-decoration:line-through;font-size:1.05rem}
+  .price-new{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:2.15rem;color:var(--green-dk)}
+  .save-badge{display:inline-block;margin-top:12px;font-size:12.5px;font-weight:700;color:var(--ink);
+    background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.4);border-radius:100px;padding:5px 12px}
+  .price-note{font-size:12.5px;color:#7a6d5e;margin-top:10px}
+
+  .ticket-stub{
+    border-left:2px dashed rgba(20,16,58,.22);padding:28px 22px;
+    display:flex;flex-direction:column;justify-content:center;gap:6px;
+  }
+  .stub-label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8a7d6e}
+  .coupon-code{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.45rem;color:var(--ink)}
+  .copy-btn{
+    margin-top:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);
+    font-family:inherit;font-weight:600;font-size:13px;padding:9px 14px;border-radius:10px;cursor:pointer;transition:.15s;
+  }
+  .copy-btn:hover{background:var(--ink);color:var(--paper)}
+
+  /* contador */
+  .urgency{margin:38px auto 0;text-align:center}
+  .urgency p{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-bottom:14px}
+  .countdown{display:inline-flex;gap:12px}
+  .cd-box{background:var(--ink-2);border:1px solid var(--line);border-radius:14px;min-width:74px;padding:14px 8px}
+  .cd-num{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:2rem;line-height:1}
+  .cd-lbl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mist);margin-top:6px}
+
+  /* CTA */
+  .cta{
+    display:inline-flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-size:1.05rem;
+    padding:18px 36px;border-radius:100px;text-decoration:none;
+    background:linear-gradient(90deg,var(--green),var(--green-dk));
+    box-shadow:0 14px 34px -10px rgba(34,197,94,.7);
+    transition:transform .15s;animation:pulse 1.8s ease-in-out infinite;
+  }
+  .cta:hover{transform:translateY(-2px);animation-play-state:paused}
+  @keyframes pulse{
+    0%   {box-shadow:0 14px 34px -10px rgba(34,197,94,.6), 0 0 0 0 rgba(34,197,94,.55)}
+    70%  {box-shadow:0 14px 34px -10px rgba(34,197,94,.6), 0 0 0 18px rgba(34,197,94,0)}
+    100% {box-shadow:0 14px 34px -10px rgba(34,197,94,.6), 0 0 0 0 rgba(34,197,94,0)}
+  }
+  .cta-wrap{text-align:center;margin-top:36px}
+  .cta-note{display:block;color:var(--mist);font-size:13px;margin-top:14px}
+
+  /* seções */
+  section.block{padding:56px 0}
+  .block.tight{padding:28px 0 44px}      /* seção de inclusos mais enxuta */
+  .h2{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+    font-size:clamp(1.8rem,4vw,2.6rem);letter-spacing:-.01em;text-align:center;max-width:22ch;margin:0 auto 10px;
+  }
+  .h2-sub{text-align:center;color:var(--mist);max-width:44ch;margin:0 auto 32px}
+  .block.tight .h2-sub{margin:0 auto 26px}
+
+  /* ROTEIRO — timeline (a sequência de dias é conteúdo real, por isso numerada) */
+  .timeline{max-width:640px;margin:0 auto;position:relative}
+  .timeline::before{content:"";position:absolute;left:26px;top:8px;bottom:8px;width:2px;
+    background:linear-gradient(180deg,var(--purple),var(--blue))}
+  .day{position:relative;padding:0 0 26px 72px}
+  .day:last-child{padding-bottom:0}
+  .day .num{
+    position:absolute;left:0;top:-2px;width:54px;height:54px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.05rem;color:#fff;
+    background:linear-gradient(135deg,var(--blue),var(--purple));border:4px solid var(--ink);
+  }
+  .day h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.2rem;margin:10px 0 4px}
+  .day p{color:var(--mist);font-size:.95rem}
+  .tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--ink);
+    background:var(--amber);border-radius:100px;padding:3px 10px;margin-left:8px;vertical-align:middle}
+
+  /* INCLUSOS */
+  .incl{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;max-width:640px;margin:0 auto}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+    border:1px solid var(--line);border-radius:var(--r);padding:20px;text-align:center;overflow:hidden}
+  .card-img{
+    aspect-ratio:1/1;width:100%;border-radius:14px;margin-bottom:16px;
+    background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.22);
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+  }
+  .card-img img{width:100%;height:100%;object-fit:cover;display:block}
+  .card-img span{font-size:12px;letter-spacing:.06em;color:var(--mist);opacity:.7}
+  .card h4{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.12rem;margin-bottom:6px}
+  .card p{color:var(--mist);font-size:.92rem}
+
+  /* prova social — avaliações do Google */
+  .reviews-head{display:flex;align-items:center;gap:14px;justify-content:center;margin-bottom:32px}
+  .g-logo{width:34px;height:34px;flex:none}
+  .reviews-title{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.15rem}
+  .reviews-score{font-size:.95rem;color:var(--mist)}
+  .reviews-score strong{color:var(--paper)}
+  .rs-stars{color:var(--amber);letter-spacing:2px}
+
+  .reviews{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:800px;margin:0 auto}
+  .review-card{
+    display:flex;flex-direction:column;color:var(--paper);
+    background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+    border:1px solid var(--line);border-radius:var(--r);padding:24px;
+  }
+  .rev-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .rev-avatar{width:44px;height:44px;border-radius:50%;flex:none;color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem}
+  .rev-name{font-weight:600;font-size:1rem;line-height:1.2}
+  .rev-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.03em;
+    color:var(--blue);background:rgba(87,107,226,.15);border-radius:100px;padding:2px 8px;margin-left:4px}
+  .rev-stars{color:var(--amber);letter-spacing:2px;font-size:.9rem;margin-top:3px}
+  .rev-text{color:var(--mist);font-size:.98rem;line-height:1.5;flex:1}
+  .rev-link{margin-top:16px;font-size:.85rem;font-weight:600;color:var(--purple)}
+
+  /* CTA final */
+  .final{text-align:center;
+    background:linear-gradient(180deg,rgba(87,107,226,.18),rgba(176,122,230,.10)),var(--ink-2);
+    border:1px solid var(--line);border-radius:28px;padding:56px 32px;margin:24px 0 80px}
+  .final h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+    font-size:clamp(2rem,5vw,3.1rem);letter-spacing:-.02em;max-width:18ch;margin:0 auto 8px}
+  .final .amber{color:var(--amber)}
+
+  /* MODAL DO FORMULÁRIO */
+  .modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+  .modal.open{display:flex}
+  .modal-backdrop{position:absolute;inset:0;background:rgba(10,7,28,.72);backdrop-filter:blur(5px)}
+  .modal-box{
+    position:relative;background:var(--paper);color:var(--ink);
+    width:100%;max-width:520px;max-height:90vh;overflow:auto;
+    border-radius:24px;padding:40px 32px 34px;box-shadow:0 40px 90px -20px rgba(0,0,0,.7);
+    animation:pop .28s cubic-bezier(.2,.9,.3,1.2) both;
+  }
+  @keyframes pop{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+  .modal-close{
+    position:absolute;top:12px;right:14px;width:38px;height:38px;border:none;cursor:pointer;
+    background:rgba(20,16,58,.06);color:var(--ink);border-radius:50%;font-size:22px;line-height:1;
+    display:flex;align-items:center;justify-content:center;transition:.15s;
+  }
+  .modal-close:hover{background:rgba(20,16,58,.14)}
+  .modal-title{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.5rem;letter-spacing:-.01em}
+  .modal-sub{color:#6b5f52;font-size:.98rem;margin:6px 0 22px}
+  .form-embed{min-height:160px}   /* área do HubSpot (fundo já é o do modal) */
+
+  footer{border-top:1px solid var(--line);padding:28px 0;text-align:center;color:var(--mist);font-size:13px}
+  footer a{color:var(--mist)}
+
+  @media(max-width:560px){
+    /* ticket empilhado: divisória horizontal com recortes ancorados nela */
+    .ticket{grid-template-columns:1fr}
+    .ticket::before,.ticket::after{display:none}      /* recortes laterais (só valem no layout lado a lado) */
+    .ticket-main{padding:30px 26px 26px;text-align:center}
+    .ticket-main .price-row{justify-content:center}
+    .ticket-stub{
+      position:relative;border-left:none;border-top:2px dashed rgba(20,16,58,.22);
+      padding:26px 26px 30px;align-items:center;text-align:center;
+    }
+    /* meias-luas exatamente sobre a linha tracejada */
+    .ticket-stub::before,.ticket-stub::after{
+      content:"";position:absolute;top:-1px;width:28px;height:28px;
+      background:var(--ink);border-radius:50%;transform:translateY(-50%);
+    }
+    .ticket-stub::before{left:-14px}
+    .ticket-stub::after{right:-14px}
+    .copy-btn{width:100%;padding:13px 14px;font-size:14px}   /* área de toque maior */
+    .coupon-code{font-size:1.6rem}
+    .discount{font-size:clamp(4.2rem,20vw,5.5rem)}
+
+    .incl{grid-template-columns:1fr}.cd-box{min-width:64px}
+    .reviews{grid-template-columns:1fr}
+    .day{padding-left:64px}.timeline::before{left:24px}
+  }
+  a:focus-visible,button:focus-visible{outline:3px solid var(--amber);outline-offset:3px;border-radius:6px}
+  @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+  <div class="topbar">⏳ Oferta com 20% OFF válida somente até 18/12. Garanta sua reserva de Bonito</div>
+
+  <div class="wrap">
+
+    <!-- HERO -->
+    <header class="hero">
+      <img class="brand-logo" src="https://blog.bonitour.com.br/wp-content/uploads/2021/05/Logotipo_em_branco_8.png" alt="Bonitour">
+      <h1>As águas de Bonito ainda estão <span class="accent">te esperando</span>.</h1>
+      <p class="sub">Você chegou perto de fechar os 6 dias em Bonito e a vida acontece e a gente entende. Pra facilitar sua volta, seguramos o pacote com <strong>20% OFF</strong>. Mesmo roteiro, preço menor.</p>
+
+      <!-- CUPOM -->
+      <div class="ticket" role="group" aria-label="Cupom de desconto do pacote Bonito">
+        <div class="ticket-main">
+          <div class="ticket-kicker">🔥 Seu desconto de volta</div>
+          <div class="discount">20<small>% OFF</small></div>
+          <div class="price-row">
+            <span class="price-old">R$ 1.563,00</span>
+            <span class="price-new">R$ 1.237,53</span>
+          </div>
+          <span class="save-badge">Você economiza R$ 325,47</span>
+          <p class="price-note">Pacote completo · 6 dias · tudo incluso.<br><strong>Desconto válido somente até 18/12.</strong></p>
+        </div>
+        <div class="ticket-stub">
+          <span class="stub-label">Use o código</span>
+          <span class="coupon-code" id="code">VOLTEI20</span>
+          <button class="copy-btn" id="copy" type="button">Copiar código</button>
+        </div>
+      </div>
+
+      <!-- contador -->
+      <div class="urgency">
+        <p>A oferta expira em · válida até 18/12</p>
+        <div class="countdown" id="cd" aria-live="polite">
+          <div class="cd-box"><div class="cd-num" id="d">00</div><div class="cd-lbl">dias</div></div>
+          <div class="cd-box"><div class="cd-num" id="h">00</div><div class="cd-lbl">horas</div></div>
+          <div class="cd-box"><div class="cd-num" id="m">00</div><div class="cd-lbl">min</div></div>
+          <div class="cd-box"><div class="cd-num" id="s">00</div><div class="cd-lbl">seg</div></div>
+        </div>
+      </div>
+
+      <div class="cta-wrap">
+        <a class="cta js-open-form" href="#formulario">Quero voltar com meu 20% OFF →</a>
+        <span class="cta-note">Preencha seus dados e a gente confirma tudo pra você.</span>
+      </div>
+    </header>
+
+    <!-- ROTEIRO -->
+    <section class="block">
+      <h2 class="h2">O roteiro perfeito de Bonito, pronto pra você</h2>
+      <p class="h2-sub">6 dias com os melhores passeios já organizados. É só embarcar.</p>
+      <div class="timeline">
+        <div class="day"><div class="num">1</div><h3>Chegada em Bonito</h3><p>Check-in e primeiro contato com a cidade.</p></div>
+        <div class="day"><div class="num">2</div><h3>Nascente Azul: Flutuação + Balneário</h3><p>Flutuação nas águas cristalinas e tarde livre no balneário.</p></div>
+        <div class="day"><div class="num">3</div><h3>Rio Sucuri</h3><p>Um dos passeios de flutuação mais famosos de Bonito.</p></div>
+        <div class="day"><div class="num">4</div><h3>Cachoeiras da Serra da Bodoquena</h3><p>Trilhas e banho de cachoeira em plena natureza.</p></div>
+        <div class="day"><div class="num">5</div><h3>Dia livre</h3><p>Descanso ou um passeio extra por sua conta. A gente ajuda a escolher.</p></div>
+        <div class="day"><div class="num">6</div><h3>Saída de Bonito</h3><p>Check-out com o roteiro completo na bagagem.</p></div>
+      </div>
+    </section>
+
+    <!-- INCLUSOS / MIMOS -->
+    <section class="block tight">
+      <h2 class="h2">E ainda tem o que já era seu</h2>
+      <p class="h2-sub">Cortesias que continuam no pacote, mesmo com o desconto.</p>
+      <div class="incl">
+        <div class="card">
+          <div class="card-img"><img src="https://i0.wp.com/visitbonito.com.br/wp-content/uploads/2019/02/juanita-restaurante.jpg?w=1080&ssl=1" alt="Jantar da Juanita" loading="lazy"></div>
+          <h4>Jantar da Juanita</h4>
+          <p>Jantar de boas-vindas, por nossa conta.</p>
+        </div>
+        <div class="card">
+          <div class="card-img"><img src="https://i0.wp.com/bonitour.com.br/wp-content/uploads/2024/11/3-dias.webp?ssl=1" alt="2 GoPros inclusas" loading="lazy"></div>
+          <h4>2 GoPros inclusas</h4>
+          <p>Aluguel de duas GoPros pra registrar tudo debaixo d'água.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROVA SOCIAL (avaliações do Google) -->
+    <section class="block">
+      <div class="reviews-head">
+        <svg class="g-logo" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        <div>
+          <div class="reviews-title">Avaliações reais no Google</div>
+          <div class="reviews-score"><strong>5,0</strong> <span class="rs-stars">★★★★★</span></div>
+        </div>
+      </div>
+
+      <div class="reviews">
+        <div class="review-card">
+          <div class="rev-head">
+            <span class="rev-avatar" style="background:linear-gradient(135deg,var(--purple),var(--blue))">A</span>
+            <div>
+              <div class="rev-name">Angélica e Fabio</div>
+              <div class="rev-stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="rev-text">Tínhamos poucos dias, e a Bonitour transformou cada momento numa experiência incrível. Tudo fluiu perfeito. Já estamos planejando voltar!</p>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-head">
+            <span class="rev-avatar" style="background:linear-gradient(135deg,var(--blue),var(--purple))">L</span>
+            <div>
+              <div class="rev-name">Leonardo Barbosa <span class="rev-badge">Local Guide</span></div>
+              <div class="rev-stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="rev-text">Entregaram tudo o que prometeram e mais um pouco. O Pascoal ainda me ensinou a usar a GoPro e fiz imagens lindas. Equipe nota 10!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section>
+      <div class="final">
+        <h2>Bora fechar Bonito com <span class="amber">20% de desconto</span>?</h2>
+        <p class="sub" style="margin:12px auto 28px">Um clique e a gente confirma o roteiro pra você.</p>
+        <a class="cta js-open-form" href="#formulario">Falar agora e garantir o desconto →</a>
+        <span class="cta-note">Oferta pessoal e por tempo limitado.</span>
+      </div>
+    </section>
+
+    <!-- ============ MODAL DO FORMULÁRIO ============
+         Abre por cima ao clicar em qualquer CTA.
+         Cole o embed do HubSpot dentro de <div class="form-embed">. -->
+    <div class="modal" id="formModal" aria-hidden="true">
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button class="modal-close" type="button" data-close aria-label="Fechar">×</button>
+        <h2 class="modal-title" id="modalTitle">Quase lá! Deixe seus dados</h2>
+        <p class="modal-sub">Preencha e a gente confirma seu pacote com 20% OFF.</p>
+        <div class="form-embed">
+          <!-- ===================================================== -->
+          <!-- COLE AQUI O CÓDIGO DO FORMULÁRIO HUBSPOT              -->
+          <!-- ===================================================== -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="wrap">
+    © <span id="yr"></span> Bonitour · <a href="{{LINK_CONTATO}}">Fale com a gente</a>
+  </footer>
+
+<script>
+  /* contador — defina o prazo:
+     data fixa:  const deadline = new Date("2026-08-31T23:59:59");
+     ou X horas a partir da abertura (padrão): */
+  const HORAS_DE_OFERTA = 48;
+  const deadline = new Date(Date.now() + HORAS_DE_OFERTA*60*60*1000);
+
+  const pad = n => String(n).padStart(2,"0");
+  const el = {d:document.getElementById("d"),h:document.getElementById("h"),
+              m:document.getElementById("m"),s:document.getElementById("s")};
+  function tick(){
+    const diff = deadline - new Date();
+    if(diff<=0){document.getElementById("cd").innerHTML=
+      '<div class="cd-box" style="min-width:auto;padding:14px 22px"><div class="cd-num">Encerrada</div></div>';
+      clearInterval(timer);return;}
+    const s=Math.floor(diff/1000);
+    el.d.textContent=pad(Math.floor(s/86400));
+    el.h.textContent=pad(Math.floor(s%86400/3600));
+    el.m.textContent=pad(Math.floor(s%3600/60));
+    el.s.textContent=pad(s%60);
+  }
+  tick();const timer=setInterval(tick,1000);
+
+  /* Modal do formulário: abre por cima ao clicar em qualquer CTA */
+  const modal = document.getElementById("formModal");
+  function abrirModal(){
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden","false");
+    document.body.style.overflow="hidden";        // trava o scroll do fundo
+  }
+  function fecharModal(){
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden","true");
+    document.body.style.overflow="";
+  }
+  document.querySelectorAll(".js-open-form").forEach(b=>{
+    b.addEventListener("click", e=>{ e.preventDefault(); abrirModal(); });
+  });
+  modal.querySelectorAll("[data-close]").forEach(x=>x.addEventListener("click", fecharModal));
+  document.addEventListener("keydown", e=>{ if(e.key==="Escape") fecharModal(); });
+
+  const btn=document.getElementById("copy");
+  btn.addEventListener("click",async()=>{
+    try{await navigator.clipboard.writeText(document.getElementById("code").textContent.trim());
+      const t=btn.textContent;btn.textContent="Copiado ✓";setTimeout(()=>btn.textContent=t,1800);
+    }catch(e){btn.textContent="Selecione e copie";}
+  });
+  document.getElementById("yr").textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
